@@ -36,16 +36,21 @@ function renderTasks() {
     const li = document.createElement("li");
 
     li.innerHTML = `
-      <div class="task-header">
-        <span class="badge subject-badge">${task.subject}</span>
-        <span class="badge due-badge">${task.date}</span>
-      </div>
-      <p class="task-text">${task.text}</p>
-      <button onclick="toggleComplete(${index})">
-        ${task.completed ? "Undo" : "Complete"}
-      </button>
-      <button onclick="deleteTask(${index})">Delete</button>
-    `;
+  <div class="task-header">
+    <span class="badge subject-badge">${task.subject}</span>
+    <span class="badge due-badge" style="background-color: ${
+      new Date(task.date).toDateString() === new Date().toDateString()
+        ? '#ef4444' // red if due today
+        : '#f87171' // default pink/red
+    }">${task.date}</span>
+  </div>
+  <p class="task-text">${task.text}</p>
+  <button onclick="toggleComplete(${index})">
+    ${task.completed ? "Undo" : "Complete"}
+  </button>
+  <button onclick="deleteTask(${index})">Delete</button>
+`;
+
 
     if (task.completed) {
       li.style.textDecoration = "line-through";
@@ -131,6 +136,7 @@ checkDueTasks();
 
 
   
+
 
 
 
