@@ -18,21 +18,25 @@ function renderTasks() {
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
 
-    li.innerHTML = `
-      <strong>${task.subject}</strong> — ${task.text}<br>
-      <small>Due: ${task.date}</small><br>
-      <button onclick="toggleComplete(${index})">
-        ${task.completed ? "Undo" : "Complete"}
-      </button>
-      <button onclick="deleteTask(${index})">Delete</button>
-    `;
+    
 
     if (task.completed) {
       li.style.textDecoration = "line-through";
       li.style.opacity = "0.6";
     }
 
-    taskList.appendChild(li);
+    taskli.innerHTML = `
+  <div class="task-header">
+    <span class="badge subject-badge">${task.subject}</span>
+    <span class="badge due-badge">${task.date}</span>
+  </div>
+  <p class="task-text">${task.text}</p>
+  <button onclick="toggleComplete(${index})">
+    ${task.completed ? "Undo" : "Complete"}
+  </button>
+  <button onclick="deleteTask(${index})">Delete</button>
+`;
+List.appendChild(li);
   });
 }
 
@@ -115,5 +119,6 @@ if (quoteEl) {
 
 
   
+
 
 
