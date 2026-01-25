@@ -110,5 +110,34 @@ footer {
   font-weight: bold;
   color: #333;
 }
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.subject-badge {
+  background: #4f46e5; /* purple */
+}
+
+.due-badge {
+  background: #f87171; /* red */
+}
+
+/* Optional: completed task style adjustment */
+li.completed .badge {
+  opacity: 0.6;
+}
+
 
 
