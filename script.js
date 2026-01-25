@@ -30,42 +30,35 @@ function saveTasks() {
 
 // Render tasks
 function renderTasks() {
-  taskList.innerHTML = "";
+  taskGroups[date].forEach(task => {
+  const li = document.createElement("li");
 
-  tasks.forEach((task, index) => {
-    const li = document.createElement("li");
+  li.innerHTML = `
+    <div class="task-header">
+      <span class="badge subject-badge">${task.subject}</span>
+      <span class="badge due-badge" style="background-color: ${
+        new Date(task.date).toDateString() === new Date().toDateString()
+          ? '#ef4444'
+          : '#f87171'
+      }">${task.date}</span>
+    </div>
+    <p class="task-text">${task.text}</p>
+    <button onclick="toggleComplete(${tasks.indexOf(task)})">
+      ${task.completed ? "Undo" : "Complete"}
+    </button>
+    <button onclick="deleteTask(${tasks.indexOf(task)})">Delete</button>
+  `;
 
-    li.innerHTML = `
-  <div class="task-header">
-    <span class="badge subject-badge">${task.subject}</span>
-    <span class="badge due-badge" style="background-color: ${
-      new Date(task.date).toDateString() === new Date().toDateString()
-        ? '#ef4444' // red if due today
-        : '#f87171' // default pink/red
-    }">${task.date}</span>
-  </div>
-  <p class="task-text">${task.text}</p>
-  <button onclick="toggleComplete(${index})">
-    ${task.completed ? "Undo" : "Complete"}
-  </button>
-  <button onclick="deleteTask(${index})">Delete</button>
-`;
+  // Apply completed style if task is done
+  if (task.completed) {
+    li.classList.add("completed");
+  }
 
+  // Append first, then animate in
+  taskList.appendChild(li);
+  setTimeout(() => li.classList.add("show"), 50);
+});
 
-    if (task.completed) {
-      li.style.textDecoration = "line-through";
-      li.style.opacity = "0.6";
-    }
-
-    taskList.appendChild(li);
-  });
-
-  // Update progress bar
-  const total = tasks.length;
-  const completed = tasks.filter(task => task.completed).length;
-  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
-  progressBar.style.width = percent + "%";
-  progressText.textContent = `${completed} of ${total} tasks completed`;
 }
 
 // Add task
@@ -95,11 +88,33 @@ addBtn.addEventListener("click", () => {
   dateInput.value = "";
 });
 
-// Delete task
+// Delete task  
 function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
+  const liElements = taskList.querySelectorAll("li");
+  const li = liElements[index];
+
+  if (li) {
+    li.classList.add("delete-animation");
+    setTimeout(() => {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }, 300); // matches CSS transition
+  }
+}
+// Toggle a task as completed or not
+function toggleComplete(index) {
+  tasks[index].completed = !tasks[index].completed; // flip true/false
+  saveTasks(); // save changes to localStorage
+  renderTasks(); // re-render task list
+
+  // Optional: tiny visual flash when toggled
+  const liElements = taskList.querySelectorAll("li");
+  const li = liElements[index];
+  if (li) {
+    li.style.backgroundColor = "#d1fae5"; // light green flash
+    setTimeout(() => li.style.backgroundColor = "transparent", 200);
+  }
 }
 
 // Complete task
@@ -136,6 +151,7 @@ checkDueTasks();
 
 
   
+
 
 
 
