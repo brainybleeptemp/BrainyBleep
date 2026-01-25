@@ -5,6 +5,12 @@ body {
   margin: 0;
   padding: 0;
   color: #111827;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #1f2937;
+  color: #f9fafb;
 }
 
 header {
@@ -12,6 +18,7 @@ header {
   color: white;
   padding: 20px;
   text-align: center;
+  position: relative;
 }
 
 header h1 {
@@ -38,6 +45,11 @@ footer {
   color: #374151;
 }
 
+body.dark-mode footer {
+  background-color: #111827;
+  color: #d1d5db;
+}
+
 /* === INPUTS AND BUTTONS === */
 input[type="text"],
 input[type="datetime-local"] {
@@ -47,12 +59,18 @@ input[type="datetime-local"] {
   border: 1px solid #d1d5db;
   width: calc(100% - 20px);
   box-sizing: border-box;
-  transition: border 0.2s;
+  transition: border 0.2s, background-color 0.2s, color 0.2s;
 }
 
 input:focus {
   outline: none;
   border-color: #3b82f6;
+}
+
+body.dark-mode input {
+  background-color: #374151;
+  color: #f9fafb;
+  border-color: #6b7280;
 }
 
 button {
@@ -68,6 +86,11 @@ button {
 
 button:hover {
   background-color: #2563eb;
+}
+
+body.dark-mode button {
+  background-color: #2563eb;
+  color: #f9fafb;
 }
 
 /* === TASK LIST === */
@@ -87,6 +110,12 @@ li {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
+}
+
+body.dark-mode li {
+  background-color: #374151;
+  color: #f9fafb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
 li.show {
@@ -125,11 +154,20 @@ li.delete-animation {
 }
 
 .subject-badge {
-  background-color: #10b981; /* green */
+  background-color: #10b981; /* green default */
 }
 
 .due-badge {
-  background-color: #f87171; /* red by default, today handled in JS */
+  background-color: #f87171; /* red default, today handled in JS */
+}
+
+/* Dark mode badges */
+body.dark-mode .subject-badge {
+  color: #fefefe;
+}
+
+body.dark-mode .due-badge {
+  color: #fefefe;
 }
 
 /* === PROGRESS BAR === */
@@ -139,6 +177,10 @@ li.delete-animation {
   margin: 10px 0;
   overflow: hidden;
   height: 20px;
+}
+
+body.dark-mode .progress-container {
+  background-color: #6b7280;
 }
 
 .progress-bar {
@@ -169,6 +211,25 @@ li.delete-animation {
 
 .quote-card:hover {
   transform: scale(1.03);
+}
+
+body.dark-mode .quote-card {
+  background-color: #4b5563;
+  color: #f9fafb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* === STREAK DISPLAY === */
+.streak {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1em;
+  color: #f97316; /* orange for streak */
+}
+
+body.dark-mode .streak {
+  color: #facc15;
 }
 
 /* === RESPONSIVE DESIGN === */
