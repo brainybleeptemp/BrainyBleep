@@ -1,4 +1,4 @@
-// Elements
+// === ELEMENTS ===
 const taskInput = document.getElementById("task-input");
 const subjectInput = document.getElementById("subject-input");
 const dateInput = document.getElementById("date-input");
@@ -8,30 +8,32 @@ const progressBar = document.getElementById("progress-bar");
 const progressText = document.getElementById("progress-text");
 const quoteEl = document.getElementById("quote");
 
-// Load tasks from localStorage
+// === LOAD TASKS FROM LOCAL STORAGE ===
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Motivational quotes
+// === MOTIVATIONAL QUOTES ===
 const quotes = [
   "Small steps every day 🧠✨",
   "You’re closer than you think 💪",
   "Future you is cheering 📣",
   "One task at a time 📚",
-  "Progress beats perfection 🌱"
+  "Progress beats perfection 🌱",
+  "Keep going, almost there 🔥"
 ];
 if (quoteEl) {
   quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
-// Save tasks
+// === SAVE TASKS ===
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Render tasks grouped by date with animations
+// === RENDER TASKS WITH GROUPED VIEW, ANIMATIONS, AND PROGRESS BAR ===
 function renderTasks() {
   taskList.innerHTML = "";
 
+  // Group tasks by date
   const taskGroups = {};
   tasks.forEach(task => {
     const dateStr = new Date(task.date).toDateString();
@@ -81,9 +83,9 @@ function renderTasks() {
   progressText.textContent = `${completed} of ${total} tasks completed`;
 }
 
-// Add task
+// === ADD TASK ===
 addBtn.addEventListener("click", () => {
-  if (taskInput.value === "" || subjectInput.value === "" || dateInput.value === "") {
+  if (!taskInput.value || !subjectInput.value || !dateInput.value) {
     alert("Please fill in all fields");
     return;
   }
@@ -100,16 +102,16 @@ addBtn.addEventListener("click", () => {
   saveTasks();
   renderTasks();
 
+  // Clear inputs
   taskInput.value = "";
   subjectInput.value = "";
   dateInput.value = "";
 });
 
-// Delete task with animation
+// === DELETE TASK WITH ANIMATION ===
 function deleteTask(index) {
   const liElements = taskList.querySelectorAll("li");
   const li = liElements[index];
-
   if (li) {
     li.classList.add("delete-animation");
     setTimeout(() => {
@@ -120,7 +122,7 @@ function deleteTask(index) {
   }
 }
 
-// Toggle complete / undo
+// === TOGGLE COMPLETE / UNDO ===
 function toggleComplete(index) {
   tasks[index].completed = !tasks[index].completed;
   saveTasks();
@@ -134,16 +136,13 @@ function toggleComplete(index) {
   }
 }
 
-// Notify upcoming tasks a few hours before
+// === NOTIFICATIONS FOR UPCOMING TASKS ===
 function notifyUpcomingTasks() {
   const now = new Date();
-
   tasks.forEach(task => {
     if (task.completed) return;
-
     const taskTime = new Date(task.date);
     const diffHours = (taskTime - now) / (1000 * 60 * 60);
-
     if (diffHours > 0 && diffHours <= 3 && !task.notified) {
       alert(`⏰ Upcoming: "${task.text}" is due at ${taskTime.toLocaleTimeString()}`);
       task.notified = true;
@@ -152,25 +151,9 @@ function notifyUpcomingTasks() {
   });
 }
 
-// Initial render and notifications
+// === INITIALIZE ===
 renderTasks();
 notifyUpcomingTasks();
-
-// Check every 10 minutes
-setInterval(notifyUpcomingTasks, 10 * 60 * 1000);
-
-
- 
-     
-
+setInterval(notifyUpcomingTasks, 10 * 60 * 1000); // check every 10 min
 
   
-
-
-
-
-
-
-
-
-
