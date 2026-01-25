@@ -11,7 +11,7 @@ const quoteEl = document.getElementById("quote");
 // Load tasks from localStorage
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Add motivational quote
+// Motivational quotes
 const quotes = [
   "Small steps every day 🧠✨",
   "You’re closer than you think 💪",
@@ -28,46 +28,62 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Render tasks
+// Render tasks grouped by date with animations
 function renderTasks() {
-  taskGroups[date].forEach(task => {
-  const li = document.createElement("li");
+  taskList.innerHTML = "";
 
-  li.innerHTML = `
-    <div class="task-header">
-      <span class="badge subject-badge">${task.subject}</span>
-      <span class="badge due-badge" style="background-color: ${
-        new Date(task.date).toDateString() === new Date().toDateString()
-          ? '#ef4444'
-          : '#f87171'
-      }">${task.date}</span>
-    </div>
-    <p class="task-text">${task.text}</p>
-    <button onclick="toggleComplete(${tasks.indexOf(task)})">
-      ${task.completed ? "Undo" : "Complete"}
-    </button>
-    <button onclick="deleteTask(${tasks.indexOf(task)})">Delete</button>
-  `;
+  const taskGroups = {};
+  tasks.forEach(task => {
+    const dateStr = new Date(task.date).toDateString();
+    if (!taskGroups[dateStr]) taskGroups[dateStr] = [];
+    taskGroups[dateStr].push(task);
+  });
 
-  // Apply completed style if task is done
-  if (task.completed) {
-    li.classList.add("completed");
-  }
+  const sortedDates = Object.keys(taskGroups).sort(
+    (a, b) => new Date(a) - new Date(b)
+  );
 
-  // Append first, then animate in
-  taskList.appendChild(li);
-  setTimeout(() => li.classList.add("show"), 50);
-});
+  sortedDates.forEach(date => {
+    const dateHeader = document.createElement("h4");
+    dateHeader.textContent = date;
+    taskList.appendChild(dateHeader);
 
+    taskGroups[date].forEach(task => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="task-header">
+          <span class="badge subject-badge">${task.subject}</span>
+          <span class="badge due-badge" style="background-color: ${
+            new Date(task.date).toDateString() === new Date().toDateString()
+              ? '#ef4444'
+              : '#f87171'
+          }">${task.date}</span>
+        </div>
+        <p class="task-text">${task.text}</p>
+        <button onclick="toggleComplete(${tasks.indexOf(task)})">
+          ${task.completed ? "Undo" : "Complete"}
+        </button>
+        <button onclick="deleteTask(${tasks.indexOf(task)})">Delete</button>
+      `;
+
+      if (task.completed) li.classList.add("completed");
+
+      taskList.appendChild(li);
+      setTimeout(() => li.classList.add("show"), 50);
+    });
+  });
+
+  // Update progress bar
+  const total = tasks.length;
+  const completed = tasks.filter(task => task.completed).length;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+  progressBar.style.width = percent + "%";
+  progressText.textContent = `${completed} of ${total} tasks completed`;
 }
 
 // Add task
 addBtn.addEventListener("click", () => {
-  if (
-    taskInput.value === "" ||
-    subjectInput.value === "" ||
-    dateInput.value === ""
-  ) {
+  if (taskInput.value === "" || subjectInput.value === "" || dateInput.value === "") {
     alert("Please fill in all fields");
     return;
   }
@@ -76,7 +92,8 @@ addBtn.addEventListener("click", () => {
     text: taskInput.value,
     subject: subjectInput.value,
     date: dateInput.value,
-    completed: false
+    completed: false,
+    notified: false
   };
 
   tasks.push(newTask);
@@ -88,7 +105,7 @@ addBtn.addEventListener("click", () => {
   dateInput.value = "";
 });
 
-// Delete task  
+// Delete task with animation
 function deleteTask(index) {
   const liElements = taskList.querySelectorAll("li");
   const li = liElements[index];
@@ -99,58 +116,56 @@ function deleteTask(index) {
       tasks.splice(index, 1);
       saveTasks();
       renderTasks();
-    }, 300); // matches CSS transition
-  }
-}
-// Toggle a task as completed or not
-function toggleComplete(index) {
-  tasks[index].completed = !tasks[index].completed; // flip true/false
-  saveTasks(); // save changes to localStorage
-  renderTasks(); // re-render task list
-
-  // Optional: tiny visual flash when toggled
-  const liElements = taskList.querySelectorAll("li");
-  const li = liElements[index];
-  if (li) {
-    li.style.backgroundColor = "#d1fae5"; // light green flash
-    setTimeout(() => li.style.backgroundColor = "transparent", 200);
+    }, 300);
   }
 }
 
-// Complete task
+// Toggle complete / undo
 function toggleComplete(index) {
   tasks[index].completed = !tasks[index].completed;
   saveTasks();
   renderTasks();
+
+  const liElements = taskList.querySelectorAll("li");
+  const li = liElements[index];
+  if (li) {
+    li.style.backgroundColor = "#d1fae5"; // tiny flash
+    setTimeout(() => (li.style.backgroundColor = "transparent"), 200);
+  }
 }
 
-// Initial render
-renderTasks();
-function checkDueTasks() {
+// Notify upcoming tasks a few hours before
+function notifyUpcomingTasks() {
   const now = new Date();
 
   tasks.forEach(task => {
-    const taskDate = new Date(task.date);
-    const isDueToday =
-      taskDate.getFullYear() === now.getFullYear() &&
-      taskDate.getMonth() === now.getMonth() &&
-      taskDate.getDate() === now.getDate() &&
-      !task.completed;
+    if (task.completed) return;
 
-    if (isDueToday) {
-      alert(`Reminder: "${task.text}" is due today!`);
+    const taskTime = new Date(task.date);
+    const diffHours = (taskTime - now) / (1000 * 60 * 60);
+
+    if (diffHours > 0 && diffHours <= 3 && !task.notified) {
+      alert(`⏰ Upcoming: "${task.text}" is due at ${taskTime.toLocaleTimeString()}`);
+      task.notified = true;
+      saveTasks();
     }
   });
 }
 
-// Check when page loads
-checkDueTasks();
+// Initial render and notifications
+renderTasks();
+notifyUpcomingTasks();
+
+// Check every 10 minutes
+setInterval(notifyUpcomingTasks, 10 * 60 * 1000);
 
 
-
+ 
+     
 
 
   
+
 
 
 
