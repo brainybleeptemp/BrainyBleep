@@ -75,6 +75,26 @@ function toggleComplete(index) {
   tasks[index].completed = !tasks[index].completed;
   saveTasks();
   renderTasks();
+  const progressBar = document.getElementById("progress-bar");
+const progressText = document.getElementById("progress-text");
+
+function updateProgress() {
+  const total = tasks.length;
+  const completed = tasks.filter(task => task.completed).length;
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  progressBar.style.width = percent + "%";
+  progressText.textContent = `${completed} of ${total} tasks completed`;
+}
+
+// Update progress whenever tasks are rendered
+renderTasks = (function(origRender) {
+  return function() {
+    origRender();
+    updateProgress();
+  }
+})(renderTasks);
+
 }
 
 // Load on refresh
@@ -95,4 +115,5 @@ if (quoteEl) {
 
 
   
+
 
