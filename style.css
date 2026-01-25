@@ -147,6 +147,29 @@ h4 {
   border-bottom: 1px solid #ddd;
   padding-bottom: 0.2rem;
 }
+/* Task animations */
+li {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+li.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+li.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+  transition: all 0.3s ease;
+}
+
+li.delete-animation {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
 
 
 
