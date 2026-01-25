@@ -79,6 +79,20 @@ function toggleComplete(index) {
 
 // Load on refresh
 renderTasks();
+const quotes = [
+  "Small steps every day 🧠✨",
+  "You’re closer than you think 💪",
+  "Future you is cheering 📣",
+  "One task at a time 📚",
+  "Progress beats perfection 🌱"
+];
+
+const quoteEl = document.getElementById("quote");
+if (quoteEl) {
+  quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+}
+
 
 
   
+
