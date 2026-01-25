@@ -106,11 +106,32 @@ function toggleComplete(index) {
 
 // Initial render
 renderTasks();
+function checkDueTasks() {
+  const now = new Date();
+
+  tasks.forEach(task => {
+    const taskDate = new Date(task.date);
+    const isDueToday =
+      taskDate.getFullYear() === now.getFullYear() &&
+      taskDate.getMonth() === now.getMonth() &&
+      taskDate.getDate() === now.getDate() &&
+      !task.completed;
+
+    if (isDueToday) {
+      alert(`Reminder: "${task.text}" is due today!`);
+    }
+  });
+}
+
+// Check when page loads
+checkDueTasks();
+
 
 
 
 
   
+
 
 
 
