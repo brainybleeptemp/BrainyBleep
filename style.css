@@ -138,6 +138,16 @@ footer {
 li.completed .badge {
   opacity: 0.6;
 }
+h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #4f46e5; /* purple header for date */
+  font-size: 1rem;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.2rem;
+}
+
 
 
 
