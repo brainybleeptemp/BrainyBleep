@@ -1,34 +1,76 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background: #f9f9f9;
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  
-  header {
-    background: #6c63ff;
-    color: white;
-    padding: 20px;
-  }
-  
-  button {
-    background: #6c63ff;
-    color: white;
-    border: none;
-    padding: 10px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  button:hover {
-    background: #574bff;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f7f9;
+}
+
+header {
+  background-color: #6a83a6;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+nav a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.intro {
+  text-align: center;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+.widgets {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.widget {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 15px;
+  flex: 1 1 30%; /* Responsive layout */
+  min-width: 250px;
+}
+
+.widget h3 {
+  margin-top: 0;
+}
+
+.button {
+  background-color: #6a83a6;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #5a6a86;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #333;
+  color: white;
+}
   
