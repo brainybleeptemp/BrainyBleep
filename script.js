@@ -199,3 +199,26 @@ darkToggle.addEventListener("click", () => {
 renderTasks();
 notifyUpcomingTasks();
 setInterval(notifyUpcomingTasks, 10 * 60 * 1000); // every 10 min
+const nameInput = document.getElementById("name-input");
+const saveNameBtn = document.getElementById("save-name-btn");
+const greeting = document.getElementById("greeting");
+
+// Load saved name
+const savedName = localStorage.getItem("studentName");
+if (savedName) {
+  greeting.textContent = `Welcome back, ${savedName} 👋`;
+  nameInput.style.display = "none";
+  saveNameBtn.style.display = "none";
+}
+
+// Save name
+saveNameBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (name !== "") {
+    localStorage.setItem("studentName", name);
+    greeting.textContent = `Welcome back, ${name} 👋`;
+    nameInput.style.display = "none";
+    saveNameBtn.style.display = "none";
+  }
+});
+
