@@ -1,0 +1,22 @@
+{
+  "name": "BrainyBleep",
+  "short_name": "Bleep",
+  "description": "A smart homework reminder app, your academic wingman.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1220",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "mascot-head-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "mascot-head-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
