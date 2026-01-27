@@ -29,3 +29,27 @@ self.addEventListener("fetch", event => {
     caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
+// Listen for push events
+self.addEventListener('push', event => {
+  const data = event.data ? event.data.json() : { title: "BrainyBleep", body: "You have a reminder!" };
+  const options = {
+    body: data.body,
+    icon: 'mascot-head-icon.png',
+    badge: 'mascot-head-icon.png',
+    vibrate: [100, 50, 100],
+    data: { url: './index.html' }
+  };
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then(clientList => {
+      if (clients.openWindow) return clients.openWindow(event.notification.data.url);
+    })
+  );
+});
