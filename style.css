@@ -252,3 +252,31 @@ body.dark-mode .streak {
     height: 16px;
   }
 }
+.user-card {
+  background: #f5f7ff;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.user-card input {
+  padding: 0.6rem;
+  width: 70%;
+  max-width: 250px;
+  margin: 0.5rem 0;
+}
+
+.user-card button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #6c63ff;
+  color: white;
+  cursor: pointer;
+}
+
+.user-card button:hover {
+  opacity: 0.9;
+}
+
