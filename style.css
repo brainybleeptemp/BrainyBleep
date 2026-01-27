@@ -1,282 +1,200 @@
-/* === GLOBAL STYLES === */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fefefe;
+/* ---------------- RESET ---------------- */
+* {
   margin: 0;
   padding: 0;
-  color: #111827;
-  transition: background-color 0.3s, color 0.3s;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body.dark-mode {
-  background-color: #1f2937;
-  color: #f9fafb;
+/* ---------------- BODY ---------------- */
+body {
+  background: #0f1220; /* deep charcoal */
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.5s, color 0.5s;
 }
 
+/* ---------------- HEADER ---------------- */
 header {
-  background-color: #3b82f6;
-  color: white;
-  padding: 20px;
   text-align: center;
-  position: relative;
+  padding: 2rem 1rem 1rem 1rem;
 }
 
 header h1 {
-  margin: 0;
-  font-size: 2rem;
+  font-size: 2.5rem;
+  color: #8b5cf6; /* neon purple accent */
+  text-shadow: 0 0 10px #8b5cf6, 0 0 20px #06b6d4;
 }
 
 header p {
-  margin: 5px 0 0 0;
-  font-style: italic;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  color: #38bdf8; /* neon blue accent */
+  text-shadow: 0 0 5px #38bdf8;
 }
 
+/* ---------------- MAIN ---------------- */
 main {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 0 15px;
+  width: 90%;
+  max-width: 700px;
+  padding: 1rem;
 }
 
-footer {
+/* ---------------- QUOTE CARD ---------------- */
+.quote-card {
+  background: rgba(20, 20, 35, 0.85);
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
   text-align: center;
-  padding: 15px;
-  font-size: 0.9em;
-  background-color: #e5e7eb;
-  color: #374151;
 }
 
-body.dark-mode footer {
-  background-color: #111827;
-  color: #d1d5db;
+.quote-card #quote {
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #22d3ee; /* neon cyan accent */
 }
 
-/* === INPUTS AND BUTTONS === */
-input[type="text"],
-input[type="datetime-local"] {
-  padding: 8px;
-  margin: 5px 5px 5px 0;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  width: calc(100% - 20px);
-  box-sizing: border-box;
-  transition: border 0.2s, background-color 0.2s, color 0.2s;
-}
-
-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-}
-
-body.dark-mode input {
-  background-color: #374151;
-  color: #f9fafb;
-  border-color: #6b7280;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: bold;
-  transition: all 0.2s;
-}
-
-button:hover {
-  background-color: #2563eb;
-}
-
-body.dark-mode button {
-  background-color: #2563eb;
-  color: #f9fafb;
-}
-
-/* === TASK LIST === */
-ul {
+/* ---------------- TASK LIST ---------------- */
+ul#task-list {
   list-style: none;
-  padding: 0;
 }
 
-li {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  background-color: #fef3c7; /* soft yellow */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-body.dark-mode li {
-  background-color: #374151;
-  color: #f9fafb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-}
-
-li.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-li.completed {
-  opacity: 0.6;
-  text-decoration: line-through;
-}
-
-li.delete-animation {
-  opacity: 0;
-  transform: translateX(100%);
-  transition: all 0.3s ease;
-}
-
-.task-header {
+ul#task-list li {
+  background: rgba(30, 30, 50, 0.85);
+  margin: 0.8rem 0;
+  padding: 1rem;
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  transition: background 0.3s;
 }
 
-.task-text {
-  margin: 5px 0;
+ul#task-list li.completed {
+  opacity: 0.7;
+  text-decoration: line-through;
 }
 
-/* === BADGES === */
-.badge {
-  padding: 3px 8px;
-  border-radius: 6px;
-  color: white;
-  font-size: 0.8em;
+/* Task main text */
+.task-main strong {
+  font-size: 1rem;
+  color: #e0e0e0;
 }
 
-.subject-badge {
-  background-color: #10b981; /* green default */
+.task-main .subject {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: #a5f3fc; /* soft neon cyan */
 }
 
-.due-badge {
-  background-color: #f87171; /* red default, today handled in JS */
+.task-main .status {
+  margin-left: 1rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #facc15; /* neon yellow for due status */
 }
 
-/* Dark mode badges */
-body.dark-mode .subject-badge {
-  color: #fefefe;
-}
-
-body.dark-mode .due-badge {
-  color: #fefefe;
-}
-
-/* === PROGRESS BAR === */
-.progress-container {
-  background-color: #e5e7eb;
+/* ---------------- TASK ACTION BUTTONS ---------------- */
+.task-actions button {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: none;
   border-radius: 8px;
-  margin: 10px 0;
-  overflow: hidden;
-  height: 20px;
+  background: #8b5cf6; /* neon purple */
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px #8b5cf6;
 }
 
-body.dark-mode .progress-container {
-  background-color: #6b7280;
+.task-actions button:hover {
+  box-shadow: 0 0 15px #8b5cf6, 0 0 30px #22d3ee;
+  transform: translateY(-2px);
+}
+
+/* ---------------- ADD TASK INPUTS ---------------- */
+#task-input, #subject-input, #date-input {
+  width: calc(100% - 1rem);
+  padding: 0.6rem;
+  margin: 0.3rem 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(50, 50, 70, 0.8);
+  color: #e0e0e0;
+  box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+}
+
+/* Add button */
+#add-btn {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  background: #22d3ee; /* neon cyan */
+  border: none;
+  border-radius: 12px;
+  color: #0f1220;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #22d3ee;
+  transition: all 0.3s ease;
+}
+
+#add-btn:hover {
+  box-shadow: 0 0 20px #22d3ee, 0 0 40px #8b5cf6;
+  transform: translateY(-2px);
+}
+
+/* ---------------- PROGRESS BAR ---------------- */
+.progress-container {
+  width: 100%;
+  background: rgba(50, 50, 70, 0.6);
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
 .progress-bar {
-  height: 100%;
-  width: 0;
-  background-color: #3b82f6;
-  transition: width 0.3s ease;
+  height: 15px;
+  width: 0%;
+  background: linear-gradient(90deg, #8b5cf6, #22d3ee, #4ade80);
+  transition: width 0.5s ease;
 }
 
 #progress-text {
   text-align: right;
-  font-size: 0.9em;
-  margin-top: 3px;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  color: #fff;
 }
 
-/* === MOTIVATIONAL QUOTE CARD === */
-.quote-card {
-  background-color: #fef9c3;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  text-align: center;
-  font-style: italic;
-  font-weight: bold;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.quote-card:hover {
-  transform: scale(1.03);
-}
-
-body.dark-mode .quote-card {
-  background-color: #4b5563;
-  color: #f9fafb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-}
-
-/* === STREAK DISPLAY === */
-.streak {
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1em;
-  color: #f97316; /* orange for streak */
-}
-
-body.dark-mode .streak {
-  color: #facc15;
-}
-
-/* === RESPONSIVE DESIGN === */
-@media (max-width: 600px) {
-  body {
-    font-size: 0.9em;
-  }
-
-  li {
-    font-size: 0.9em;
-    padding: 10px;
-  }
-
-  button {
-    padding: 6px 10px;
-    font-size: 0.9em;
-  }
-
-  .progress-container {
-    height: 16px;
-  }
-}
-.user-card {
-  background: #f5f7ff;
+/* ---------------- FOOTER ---------------- */
+footer {
+  margin-top: auto;
   padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
   text-align: center;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px #8b5cf6;
 }
 
-.user-card input {
-  padding: 0.6rem;
-  width: 70%;
-  max-width: 250px;
-  margin: 0.5rem 0;
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 2rem;
+  }
+  .task-main strong {
+    font-size: 0.95rem;
+  }
+  .task-main .subject, .task-main .status {
+    font-size: 0.75rem;
+  }
+  #add-btn {
+    font-size: 0.9rem;
+  }
 }
-
-.user-card button {
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 8px;
-  background: #6c63ff;
-  color: white;
-  cursor: pointer;
-}
-
-.user-card button:hover {
-  opacity: 0.9;
-}
-
