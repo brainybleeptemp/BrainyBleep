@@ -1,232 +1,127 @@
-// === ELEMENTS ===
-const taskInput = document.getElementById("task-input");
-const subjectInput = document.getElementById("subject-input");
-const dateInput = document.getElementById("date-input");
-const taskList = document.getElementById("task-list");
-const addBtn = document.getElementById("add-btn");
-const progressBar = document.getElementById("progress-bar");
-const progressText = document.getElementById("progress-text");
-const quoteEl = document.getElementById("quote");
-const body = document.body;
+// ========================
+// BrainyBleep script.js
+// ========================
+
 // Request notification permission
 if ('Notification' in window && navigator.serviceWorker) {
   Notification.requestPermission().then(permission => {
-    if (permission === "granted") {
-      console.log("Notifications allowed");
-    }
+    if (permission === "granted") console.log("Notifications allowed");
   });
 }
-// === LOAD TASKS AND SETTINGS ===
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let streak = parseInt(localStorage.getItem("streak")) || 0;
-let lastCompletedDate = localStorage.getItem("lastCompletedDate") || null;
 
-// === USER PERSONALIZATION ===
-let userName = localStorage.getItem("userName");
-if (!userName) {
-  userName = prompt("What’s your name?") || "Student";
-  localStorage.setItem("userName", userName);
-}
-document.querySelector("header p").textContent = `Hi, ${userName}! Deadlines don’t ghost you here.`;
+// ======= TASK STORAGE & RENDERING =======
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-// === SUBJECT COLORS & EMOJIS ===
-const subjects = {
-  Math: { color: "#10b981", emoji: "📐" },
-  Science: { color: "#3b82f6", emoji: "🔬" },
-  English: { color: "#facc15", emoji: "📖" },
-  History: { color: "#f472b6", emoji: "🏛️" },
-  Other: { color: "#8b5cf6", emoji: "✨" }
-};
+const taskListEl = document.getElementById('task-list');
+const progressBarEl = document.getElementById('progress-bar');
+const progressTextEl = document.getElementById('progress-text');
 
-// === MOTIVATIONAL QUOTES ===
-const quotes = {
-  morning: ["Rise & shine! ☀️", "Start strong! 💪"],
-  afternoon: ["Keep pushing! ⚡", "Almost there! 🏃‍♀️"],
-  evening: ["Wrap it up! 🌙", "You got this! 🔥"],
-  completed: ["All done! Time for a break 🌟", "Tasks conquered! 🎉"]
-};
-
-// === SAVE TASKS & SETTINGS ===
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  localStorage.setItem("streak", streak);
-  localStorage.setItem("lastCompletedDate", lastCompletedDate);
-}
-
-// === RENDER TASKS WITH GROUPING, COLORS, EMOJIS, ANIMATIONS ===
+// Render all tasks
 function renderTasks() {
-  taskList.innerHTML = "";
+  taskListEl.innerHTML = '';
 
-  const taskGroups = {};
-  tasks.forEach(task => {
-    const dateStr = new Date(task.date).toDateString();
-    if (!taskGroups[dateStr]) taskGroups[dateStr] = [];
-    taskGroups[dateStr].push(task);
+  tasks.forEach((task, index) => {
+    const li = document.createElement('li');
+    li.className = task.completed ? 'completed-task' : '';
+
+    li.innerHTML = `
+      <strong>${task.subject}</strong>: ${task.description} <br>
+      Due: ${new Date(task.due).toLocaleString()} 
+      <button onclick="toggleComplete(${index})">${task.completed ? 'Undo' : 'Done'}</button>
+      <button onclick="deleteTask(${index})">Delete</button>
+    `;
+
+    taskListEl.appendChild(li);
   });
 
-  const sortedDates = Object.keys(taskGroups).sort(
-    (a, b) => new Date(a) - new Date(b)
-  );
-
-  sortedDates.forEach(date => {
-    const dateHeader = document.createElement("h4");
-    dateHeader.textContent = date;
-    taskList.appendChild(dateHeader);
-
-    taskGroups[date].forEach(task => {
-      const subjectData = subjects[task.subject] || subjects["Other"];
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <div class="task-header">
-          <span class="badge subject-badge" style="background-color: ${subjectData.color}">${subjectData.emoji} ${task.subject}</span>
-          <span class="badge due-badge" style="background-color: ${
-            new Date(task.date).toDateString() === new Date().toDateString() ? "#ef4444" : "#f87171"
-          }">${task.date}</span>
-        </div>
-        <p class="task-text">${task.text}</p>
-        <button onclick="toggleComplete(${tasks.indexOf(task)})">${task.completed ? "Undo" : "Complete"}</button>
-        <button onclick="deleteTask(${tasks.indexOf(task)})">Delete</button>
-      `;
-      if (task.completed) li.classList.add("completed");
-
-      taskList.appendChild(li);
-      setTimeout(() => li.classList.add("show"), 50);
-    });
-  });
-
-  // Update progress bar
-  const total = tasks.length;
-  const completed = tasks.filter(t => t.completed).length;
-  const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
-  progressBar.style.width = percent + "%";
-  progressText.textContent = `${completed} of ${total} tasks completed`;
-
-  // Update motivational quote
-  const nowHour = new Date().getHours();
-  let currentQuote = quotes.morning[0];
-  if (completed === total && total > 0) {
-    currentQuote = quotes.completed[Math.floor(Math.random() * quotes.completed.length)];
-  } else if (nowHour >= 6 && nowHour < 12) currentQuote = quotes.morning[Math.floor(Math.random() * quotes.morning.length)];
-  else if (nowHour >= 12 && nowHour < 18) currentQuote = quotes.afternoon[Math.floor(Math.random() * quotes.afternoon.length)];
-  else currentQuote = quotes.evening[Math.floor(Math.random() * quotes.evening.length)];
-  quoteEl.textContent = currentQuote;
+  updateProgress();
 }
 
-// === ADD TASK ===
-addBtn.addEventListener("click", () => {
-  if (!taskInput.value || !subjectInput.value || !dateInput.value) return alert("Fill all fields!");
-
-  const newTask = {
-    text: taskInput.value,
-    subject: subjectInput.value,
-    date: dateInput.value,
-    completed: false,
-    notified: false
-  };
-  tasks.push(newTask);
-  saveTasks();
-  renderTasks();
-
-  taskInput.value = "";
-  subjectInput.value = "";
-  dateInput.value = "";
-});
-
-// === DELETE TASK ===
-function deleteTask(index) {
-  const liElements = taskList.querySelectorAll("li");
-  const li = liElements[index];
-  if (li) {
-    li.classList.add("delete-animation");
-    setTimeout(() => {
-      tasks.splice(index, 1);
-      saveTasks();
-      renderTasks();
-    }, 300);
+// Update progress bar
+function updateProgress() {
+  if (tasks.length === 0) {
+    progressBarEl.style.width = '0%';
+    progressTextEl.textContent = '0 of 0 tasks completed';
+    return;
   }
+
+  const completed = tasks.filter(t => t.completed).length;
+  const percent = (completed / tasks.length) * 100;
+  progressBarEl.style.width = `${percent}%`;
+  progressTextEl.textContent = `${completed} of ${tasks.length} tasks completed`;
 }
 
-// === TOGGLE COMPLETE / UNDO ===
+// ======= TASK FUNCTIONS =======
+
+// Add task
+function addTask() {
+  const description = document.getElementById('task-input').value;
+  const subject = document.getElementById('subject-input').value;
+  const due = document.getElementById('date-input').value;
+
+  if (!description || !subject || !due) return;
+
+  const task = { description, subject, due, completed: false };
+  tasks.push(task);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+
+  renderTasks();
+  showTaskNotification(task);
+  scheduleNotifications([task]);
+
+  // Clear inputs
+  document.getElementById('task-input').value = '';
+  document.getElementById('subject-input').value = '';
+  document.getElementById('date-input').value = '';
+}
+
+// Toggle completed
 function toggleComplete(index) {
   tasks[index].completed = !tasks[index].completed;
-
-  // Update streak if completing today
-  const todayStr = new Date().toDateString();
-  if (tasks[index].completed && todayStr !== lastCompletedDate) {
-    streak += 1;
-    lastCompletedDate = todayStr;
-  }
-
-  saveTasks();
+  localStorage.setItem('tasks', JSON.stringify(tasks));
   renderTasks();
+}
 
-  const liElements = taskList.querySelectorAll("li");
-  const li = liElements[index];
-  if (li) {
-    li.style.backgroundColor = "#d1fae5";
-    setTimeout(() => (li.style.backgroundColor = "transparent"), 200);
+// Delete task
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  renderTasks();
+}
+
+// ======= NOTIFICATIONS =======
+
+function showTaskNotification(task) {
+  if ('Notification' in window && navigator.serviceWorker && Notification.permission === "granted") {
+    navigator.serviceWorker.ready.then(registration => {
+      registration.showNotification(`Reminder: ${task.subject}`, {
+        body: `Task: ${task.description}\nDue: ${task.due}`,
+        icon: 'mascot-head-icon.png',
+        badge: 'mascot-head-icon.png',
+        vibrate: [200, 100, 200],
+        data: { url: './index.html' }
+      });
+    });
   }
 }
 
-// === UPCOMING TASK NOTIFICATIONS ===
-let notificationLeadHours = parseInt(localStorage.getItem("notificationLeadHours")) || 3;
+function scheduleNotifications(taskList) {
+  taskList.forEach(task => {
+    const now = new Date();
+    const taskTime = new Date(task.due);
+    const timeout = taskTime - now - 5 * 60 * 1000; // 5 min before deadline
 
-function notifyUpcomingTasks() {
-  const now = new Date();
-  tasks.forEach(task => {
-    if (task.completed) return;
-    const taskTime = new Date(task.date);
-    const diffHours = (taskTime - now) / (1000 * 60 * 60);
-
-    if (diffHours > 0 && diffHours <= notificationLeadHours && !task.notified) {
-      alert(`⏰ Reminder: "${task.text}" is due at ${taskTime.toLocaleTimeString()}`);
-      task.notified = true;
-      saveTasks();
+    if (timeout > 0) {
+      setTimeout(() => showTaskNotification(task), timeout);
     }
   });
 }
 
-// === DARK MODE TOGGLE ===
-const darkToggle = document.createElement("button");
-darkToggle.textContent = "Toggle Dark Mode";
-darkToggle.style.position = "fixed";
-darkToggle.style.top = "10px";
-darkToggle.style.right = "10px";
-darkToggle.style.zIndex = "999";
-body.appendChild(darkToggle);
+// Schedule notifications for existing tasks on load
+scheduleNotifications(tasks);
 
-if (localStorage.getItem("darkMode") === "true") body.classList.add("dark-mode");
-
-darkToggle.addEventListener("click", () => {
-  body.classList.toggle("dark-mode");
-  localStorage.setItem("darkMode", body.classList.contains("dark-mode"));
-});
-
-// === INITIALIZE ===
+// Initial render
 renderTasks();
-notifyUpcomingTasks();
-setInterval(notifyUpcomingTasks, 10 * 60 * 1000); // every 10 min
-const nameInput = document.getElementById("name-input");
-const saveNameBtn = document.getElementById("save-name-btn");
-const greeting = document.getElementById("greeting");
 
-// Load saved name
-const savedName = localStorage.getItem("studentName");
-if (savedName) {
-  greeting.textContent = `Welcome back, ${savedName} 👋`;
-  nameInput.style.display = "none";
-  saveNameBtn.style.display = "none";
-}
-
-// Save name
-saveNameBtn.addEventListener("click", () => {
-  const name = nameInput.value.trim();
-  if (name !== "") {
-    localStorage.setItem("studentName", name);
-    greeting.textContent = `Welcome back, ${name} 👋`;
-    nameInput.style.display = "none";
-    saveNameBtn.style.display = "none";
-  }
-});
-
-
+// ======= OPTIONAL: add event listener for button =======
+document.getElementById('add-btn').addEventListener('click', addTask);
