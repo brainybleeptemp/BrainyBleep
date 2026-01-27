@@ -8,7 +8,14 @@ const progressBar = document.getElementById("progress-bar");
 const progressText = document.getElementById("progress-text");
 const quoteEl = document.getElementById("quote");
 const body = document.body;
-
+// Request notification permission
+if ('Notification' in window && navigator.serviceWorker) {
+  Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+      console.log("Notifications allowed");
+    }
+  });
+}
 // === LOAD TASKS AND SETTINGS ===
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let streak = parseInt(localStorage.getItem("streak")) || 0;
@@ -221,4 +228,5 @@ saveNameBtn.addEventListener("click", () => {
     saveNameBtn.style.display = "none";
   }
 });
+
 
