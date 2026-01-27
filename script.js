@@ -1,6 +1,9 @@
 // ========================
 // BrainyBleep script.js
 // ========================
+<button id="theme-toggle" aria-label="Toggle theme">
+  🌙 / ☀️
+</button>
 
 // Request notification permission
 if ('Notification' in window && navigator.serviceWorker) {
@@ -125,3 +128,4 @@ renderTasks();
 
 // ======= OPTIONAL: add event listener for button =======
 document.getElementById('add-btn').addEventListener('click', addTask);
+
