@@ -1,3 +1,24 @@
+/* ===== THEMES ===== */
+body.dark {
+  background-color: #0f1220;
+  color: #e5e7eb;
+}
+
+body.light {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Toggle button */
+#theme-toggle {
+  background: none;
+  border: 2px solid #8b5cf6;
+  color: inherit;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
 /* ---------------- RESET ---------------- */
 * {
   margin: 0;
@@ -198,3 +219,4 @@ footer {
     font-size: 0.9rem;
   }
 }
+
