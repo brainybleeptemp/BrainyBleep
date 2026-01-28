@@ -1,6 +1,7 @@
 // ========================
 // BrainyBleep script.js
 // ========================
+document.addEventListener('DOMContentLoaded', () => {
 // ===== THEME TOGGLE =====
 const themeToggle = document.getElementById('theme-toggle');
 const savedTheme = localStorage.getItem('theme');
@@ -143,6 +144,8 @@ renderTasks();
 
 // ======= OPTIONAL: add event listener for button =======
 document.getElementById('add-btn').addEventListener('click', addTask);
+});
+
 
 
 
