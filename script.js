@@ -8,16 +8,18 @@ const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
   document.body.className = savedTheme;
 }
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    if (document.body.classList.contains('light')) {
+      document.body.className = 'dark';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.className = 'light';
+      localStorage.setItem('theme', 'light');
+    }
+  });
+}
 
-themeToggle.addEventListener('click', () => {
-  if (document.body.classList.contains('light')) {
-    document.body.className = 'dark';
-    localStorage.setItem('theme', 'dark');
-  } else {
-    document.body.className = 'light';
-    localStorage.setItem('theme', 'light');
-  }
-});
 // Request notification permission
 if ('Notification' in window && navigator.serviceWorker) {
   Notification.requestPermission().then(permission => {
@@ -141,5 +143,6 @@ renderTasks();
 
 // ======= OPTIONAL: add event listener for button =======
 document.getElementById('add-btn').addEventListener('click', addTask);
+
 
 
