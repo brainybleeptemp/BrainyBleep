@@ -157,45 +157,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial render
   renderTasks();
-  // ======= MINI CHALLENGES & STREAK =======
-let streak = parseInt(localStorage.getItem('streak')) || 0;
-let challenges = JSON.parse(localStorage.getItem('challenges')) || [
-  { desc: "Solve a math problem", done: false },
-  { desc: "Read 5 pages of a book", done: false },
-  { desc: "Write a 5-line journal", done: false }
-];
-
-const challengeListEl = document.createElement('ul');
-challengeListEl.id = 'challenge-list';
-document.querySelector('main').appendChild(challengeListEl);
-
-function renderChallenges() {
-  challengeListEl.innerHTML = `<h3>Mini Challenges (Streak: ${streak})</h3>`;
-
-  challenges.forEach((c, index) => {
-    const li = document.createElement('li');
-    li.className = c.done ? 'completed-challenge' : '';
-    li.innerHTML = `
-      ${c.desc}
-      <button onclick="completeChallenge(${index})">${c.done ? 'Undo' : 'Done'}</button>
-    `;
-    challengeListEl.appendChild(li);
-  });
-}
-
-window.completeChallenge = (index) => {
+  window.completeChallenge = (index) => {
+  // Toggle the quest as done/undone
   challenges[index].done = !challenges[index].done;
 
-  // Increase streak only when marking done for first time
-  if (challenges[index].done) streak += 1;
-  else streak -= 1;
-
+  // Save current state
   localStorage.setItem('challenges', JSON.stringify(challenges));
-  localStorage.setItem('streak', streak);
-  renderChallenges();
-}
 
-// Initial render of challenges
-renderChallenges();
+  // Re-render mini challenges
+  renderChallenges();
+  renderDailyChallenges();
+
+  // Check if all quests are completed for the day
+  const allDone = challenges.every(c => c.done);
+
+  if (allDone) {
+    streak += 1;  // Only add 1 point when ALL quests done
+    localStorage.setItem('streak', streak);
+    alert(`🎉 Congrats! You completed all quests today. Streak: ${streak}`);
+  }
+};
+
 });
+
 
