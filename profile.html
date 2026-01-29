@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrainyBleep - Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🧑‍🎓 Your Profile</h1>
+    <a href="index.html">⬅ Back to Home</a>
+  </header>
+
+  <main>
+    <div class="profile-card">
+      <div class="profile-picture">
+        <img id="profile-img" src="mascot-head-icon.png" alt="Profile Picture">
+        <input type="file" id="profile-pic-input" accept="image/*">
+      </div>
+
+      <p id="profile-name">Welcome, Student 👋</p>
+      <label for="badge-select">Choose your badge:</label>
+      <select id="badge-select">
+        <option value="Amateur Legend">Amateur Legend</option>
+        <option value="Task Master">Task Master</option>
+        <option value="Brainy Star">Brainy Star</option>
+        <option value="Daily Champ">Daily Champ</option>
+      </select>
+      <p>Your Badge: <span id="badge-display">Amateur Legend</span></p>
+
+      <button id="save-profile-btn">Save Profile</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Stay sharp, stay iconic ✨</p>
+  </footer>
+
+  <script src="profile.js"></script>
+</body>
+</html>
