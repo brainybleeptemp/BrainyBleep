@@ -3,62 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrainyBleep - Tasks</title>
-  <link rel="stylesheet" href="style.css?v=3">
+  <title>Tasks | BrainyBleep</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Nav Bar -->
+
+<header>
+  <button id="theme-toggle" aria-label="Toggle theme">
+    🌙 / ☀️
+  </button>
+
+  <h1>BrainyBleep</h1>
+  <p>Your assignments, organized.</p>
+
   <nav class="nav-bar">
-    <a href="index.html" class="nav-item">Home</a>
-    <a href="tasks.html" class="nav-item">Tasks</a>
-    <a href="profile.html" class="nav-item">Profile</a>
-    <a href="chat.html" class="nav-item">Chat</a>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="tasks.html" class="nav-link">Tasks</a>
+    <a href="profile.html" class="nav-link">Profile</a>
+    <a href="chat.html" class="nav-link">Chat</a>
   </nav>
+</header>
 
-  <header>
-    <h1>Tasks</h1>
-    <p>Add, edit, and track all your assignments here.</p>
-  </header>
+<main>
+  <h2>Add a Task</h2>
 
-  <main>
-    <div class="task-inputs">
-      <input type="text" id="task-input" placeholder="Task description">
-      <input type="text" id="subject-input" placeholder="Subject (e.g., Math)">
-      <input type="datetime-local" id="date-input">
-      <button id="add-btn">Add Task</button>
-    </div>
+  <input type="text" id="task-input" placeholder="Task description">
+  <input type="text" id="subject-input" placeholder="Subject">
+  <input type="datetime-local" id="date-input">
+  <button id="add-btn">Add Reminder</button>
 
-    <div class="task-progress">
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-        <p id="progress-text">0 of 0 tasks completed</p>
-      </div>
-    </div>
+  <h2>All Tasks</h2>
+  <ul id="task-list"></ul>
 
-    <ul id="task-list">
-      <!-- Tasks will appear here -->
-    </ul>
-  </main>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+    <p id="progress-text">0 of 0 tasks completed</p>
+  </div>
+</main>
 
-  <footer>
-    <p>Stay sharp, stay iconic ✨</p>
-  </footer>
-
-  <script src="script.js?v=3"></script>
-  <script>
-    // Highlight active nav tab
-    document.addEventListener('DOMContentLoaded', () => {
-      const navItems = document.querySelectorAll('.nav-item');
-      const currentPage = window.location.pathname.split('/').pop();
-
-      navItems.forEach(item => {
-        if (item.getAttribute('href') === currentPage) {
-          item.classList.add('active');
-        } else {
-          item.classList.remove('active');
-        }
-      });
-    });
-  </script>
+<script src="script.js"></script>
 </body>
 </html>
