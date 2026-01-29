@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrainyBleep - Tasks</title>
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-item">Home</a>
+    <a href="tasks.html" class="nav-item">Tasks</a>
+    <a href="profile.html" class="nav-item">Profile</a>
+    <a href="chat.html" class="nav-item">Chat</a>
+  </nav>
+
+  <header>
+    <h1>Tasks</h1>
+    <p>Add, edit, and track all your assignments here.</p>
+  </header>
+
+  <main>
+    <div class="task-inputs">
+      <input type="text" id="task-input" placeholder="Task description">
+      <input type="text" id="subject-input" placeholder="Subject (e.g., Math)">
+      <input type="datetime-local" id="date-input">
+      <button id="add-btn">Add Task</button>
+    </div>
+
+    <div class="task-progress">
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+        <p id="progress-text">0 of 0 tasks completed</p>
+      </div>
+    </div>
+
+    <ul id="task-list">
+      <!-- Tasks will appear here -->
+    </ul>
+  </main>
+
+  <footer>
+    <p>Stay sharp, stay iconic ✨</p>
+  </footer>
+
+  <script src="script.js?v=3"></script>
+  <script>
+    // Highlight active nav tab
+    document.addEventListener('DOMContentLoaded', () => {
+      const navItems = document.querySelectorAll('.nav-item');
+      const currentPage = window.location.pathname.split('/').pop();
+
+      navItems.forEach(item => {
+        if (item.getAttribute('href') === currentPage) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
