@@ -3,14 +3,13 @@
 // ========================
 
 document.addEventListener('DOMContentLoaded', () => {
+
   // ===== THEME TOGGLE =====
   const themeToggle = document.getElementById('theme-toggle');
   const savedTheme = localStorage.getItem('theme');
-
   if (savedTheme) {
     document.body.className = savedTheme;
   }
-
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
       if (document.body.classList.contains('light')) {
@@ -24,17 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== NAME SAVE =====
-  const saveNameBtn = document.getElementById('save-name-btn');
   const nameInput = document.getElementById('name-input');
+  const saveNameBtn = document.getElementById('save-name-btn');
   const greetingEl = document.getElementById('greeting');
 
-  // Load stored name
+  // Load saved name
   const storedName = localStorage.getItem('studentName');
   if (storedName) {
     greetingEl.textContent = `Welcome back, ${storedName} 👋`;
   }
 
-  // Save name on click
   saveNameBtn.addEventListener('click', () => {
     const name = nameInput.value.trim();
     if (!name) return;
@@ -56,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('add-btn');
 
   // ===== TASK FUNCTIONS =====
-
   addBtn.addEventListener('click', () => {
     const description = taskDescInput.value.trim();
     const subject = taskSubjectInput.value.trim();
@@ -68,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tasks.push(task);
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
+    // Clear inputs
     taskDescInput.value = '';
     taskSubjectInput.value = '';
     taskDueInput.value = '';
@@ -75,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTasks();
   });
 
-  // Global functions so buttons work
+  // Make toggleComplete and deleteTask global
   window.toggleComplete = (index) => {
     tasks[index].completed = !tasks[index].completed;
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -88,23 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTasks();
   };
 
-  // ===== RENDER =====
+  // ===== RENDER TASKS =====
   function renderTasks() {
     taskListEl.innerHTML = '';
 
     tasks.forEach((task, index) => {
       const li = document.createElement('li');
       li.className = task.completed ? 'completed-task' : '';
-
       li.innerHTML = `
         <strong>${task.subject}</strong>: ${task.description}<br>
         Due: ${new Date(task.due).toLocaleString()}<br>
-        <button onclick="toggleComplete(${index})">
-          ${task.completed ? 'Undo' : 'Done'}
-        </button>
+        <button onclick="toggleComplete(${index})">${task.completed ? 'Undo' : 'Done'}</button>
         <button onclick="deleteTask(${index})">Delete</button>
       `;
-
       taskListEl.appendChild(li);
     });
 
@@ -117,10 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
       progressTextEl.textContent = '0 of 0 tasks completed';
       return;
     }
-
     const completed = tasks.filter(t => t.completed).length;
     const percent = (completed / tasks.length) * 100;
-    progressBarEl.style.width = percent + '%';
+    progressBarEl.style.width = `${percent}%`;
     progressTextEl.textContent = `${completed} of ${tasks.length} tasks completed`;
   }
 
