@@ -243,5 +243,25 @@ footer {
   text-shadow: 0 0 10px #0ff;
   transform: translateY(-2px);
 }
+#challenge-list {
+  margin-top: 2em;
+}
+
+#challenge-list li {
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  background-color: #1a1a1a;
+  color: #0ff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.completed-challenge {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
 
 
