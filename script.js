@@ -23,47 +23,72 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== TASK STORAGE =====
+  // ===== NAME SAVE =====
+  const saveNameBtn = document.getElementById('save-name-btn');
+  const nameInput = document.getElementById('name-input');
+  const greetingEl = document.getElementById('greeting');
+
+  // Load stored name
+  const storedName = localStorage.getItem('studentName');
+  if (storedName) {
+    greetingEl.textContent = `Welcome back, ${storedName} 👋`;
+  }
+
+  // Save name on click
+  saveNameBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    if (!name) return;
+    localStorage.setItem('studentName', name);
+    greetingEl.textContent = `Welcome back, ${name} 👋`;
+    nameInput.value = '';
+  });
+
+  // ===== TASK STORAGE & RENDERING =====
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
   const taskListEl = document.getElementById('task-list');
   const progressBarEl = document.getElementById('progress-bar');
   const progressTextEl = document.getElementById('progress-text');
 
-  const subjectInput = document.getElementById('subject');
-  const descriptionInput = document.getElementById('description');
-  const dueInput = document.getElementById('due-date');
-  const saveBtn = document.getElementById('save-task');
+  const taskDescInput = document.getElementById('task-input');
+  const taskSubjectInput = document.getElementById('subject-input');
+  const taskDueInput = document.getElementById('date-input');
+  const addBtn = document.getElementById('add-btn');
 
-  // ===== SAVE TASK =====
-  saveBtn.addEventListener('click', () => {
-    const subject = subjectInput.value.trim();
-    const description = descriptionInput.value.trim();
-    const due = dueInput.value;
+  // ===== TASK FUNCTIONS =====
 
-    if (!subject || !description || !due) {
-      alert('Please fill in all fields');
-      return;
-    }
+  addBtn.addEventListener('click', () => {
+    const description = taskDescInput.value.trim();
+    const subject = taskSubjectInput.value.trim();
+    const due = taskDueInput.value;
 
-    const newTask = {
-      subject,
-      description,
-      due,
-      completed: false
-    };
+    if (!description || !subject || !due) return;
 
-    tasks.push(newTask);
+    const task = { description, subject, due, completed: false };
+    tasks.push(task);
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
-    subjectInput.value = '';
-    descriptionInput.value = '';
-    dueInput.value = '';
+    taskDescInput.value = '';
+    taskSubjectInput.value = '';
+    taskDueInput.value = '';
 
     renderTasks();
   });
 
-  // ===== RENDER TASKS =====
+  // Global functions so buttons work
+  window.toggleComplete = (index) => {
+    tasks[index].completed = !tasks[index].completed;
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+  };
+
+  window.deleteTask = (index) => {
+    tasks.splice(index, 1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+  };
+
+  // ===== RENDER =====
   function renderTasks() {
     taskListEl.innerHTML = '';
 
@@ -86,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgress();
   }
 
-  // ===== PROGRESS =====
   function updateProgress() {
     if (tasks.length === 0) {
       progressBarEl.style.width = '0%';
@@ -96,23 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const completed = tasks.filter(t => t.completed).length;
     const percent = (completed / tasks.length) * 100;
-
     progressBarEl.style.width = percent + '%';
     progressTextEl.textContent = `${completed} of ${tasks.length} tasks completed`;
   }
-
-  // ===== GLOBAL FUNCTIONS =====
-  window.toggleComplete = (index) => {
-    tasks[index].completed = !tasks[index].completed;
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    renderTasks();
-  };
-
-  window.deleteTask = (index) => {
-    tasks.splice(index, 1);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    renderTasks();
-  };
 
   // Initial render
   renderTasks();
