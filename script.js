@@ -53,6 +53,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const taskDueInput = document.getElementById('date-input');
   const addBtn = document.getElementById('add-btn');
 
+  // ===== NOTIFICATIONS =====
+  if ('Notification' in window && navigator.serviceWorker) {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") console.log("Notifications allowed");
+    });
+  }
+
+  function showTaskNotification(task) {
+    if ('Notification' in window && navigator.serviceWorker && Notification.permission === "granted") {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification(`Reminder: ${task.subject}`, {
+          body: `Task: ${task.description}\nDue: ${new Date(task.due).toLocaleString()}`,
+          icon: 'mascot-head-icon.png',
+          badge: 'mascot-head-icon.png',
+          vibrate: [200, 100, 200],
+          data: { url: './index.html' }
+        });
+      });
+    }
+  }
+
+  function scheduleNotifications(taskList) {
+    taskList.forEach(task => {
+      const now = new Date();
+      const taskTime = new Date(task.due);
+      const timeout = taskTime - now - 5 * 60 * 1000; // 5 min before
+
+      if (timeout > 0) {
+        setTimeout(() => showTaskNotification(task), timeout);
+      }
+    });
+  }
+
   // ===== TASK FUNCTIONS =====
   addBtn.addEventListener('click', () => {
     const description = taskDescInput.value.trim();
@@ -71,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
     taskDueInput.value = '';
 
     renderTasks();
+    showTaskNotification(task);
+    scheduleNotifications([task]);
   });
 
   // Make toggleComplete and deleteTask global
@@ -116,6 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBarEl.style.width = `${percent}%`;
     progressTextEl.textContent = `${completed} of ${tasks.length} tasks completed`;
   }
+
+  // Schedule notifications for existing tasks on load
+  scheduleNotifications(tasks);
 
   // Initial render
   renderTasks();
