@@ -157,4 +157,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial render
   renderTasks();
+  // ======= MINI CHALLENGES & STREAK =======
+let streak = parseInt(localStorage.getItem('streak')) || 0;
+let challenges = JSON.parse(localStorage.getItem('challenges')) || [
+  { desc: "Solve a math problem", done: false },
+  { desc: "Read 5 pages of a book", done: false },
+  { desc: "Write a 5-line journal", done: false }
+];
+
+const challengeListEl = document.createElement('ul');
+challengeListEl.id = 'challenge-list';
+document.querySelector('main').appendChild(challengeListEl);
+
+function renderChallenges() {
+  challengeListEl.innerHTML = `<h3>Mini Challenges (Streak: ${streak})</h3>`;
+
+  challenges.forEach((c, index) => {
+    const li = document.createElement('li');
+    li.className = c.done ? 'completed-challenge' : '';
+    li.innerHTML = `
+      ${c.desc}
+      <button onclick="completeChallenge(${index})">${c.done ? 'Undo' : 'Done'}</button>
+    `;
+    challengeListEl.appendChild(li);
+  });
+}
+
+window.completeChallenge = (index) => {
+  challenges[index].done = !challenges[index].done;
+
+  // Increase streak only when marking done for first time
+  if (challenges[index].done) streak += 1;
+  else streak -= 1;
+
+  localStorage.setItem('challenges', JSON.stringify(challenges));
+  localStorage.setItem('streak', streak);
+  renderChallenges();
+}
+
+// Initial render of challenges
+renderChallenges();
 });
+
