@@ -6,6 +6,7 @@ function sendMessage() {
   if (!message) return;
 
   addMessage(message, "user");
+  localStorage.setItem("chattedToday", true);
   input.value = "";
 
   setTimeout(() => {
