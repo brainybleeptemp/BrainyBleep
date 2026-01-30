@@ -214,6 +214,26 @@ function checkDailyCompletion() {
 if (localStorage.getItem("chattedToday")) {
   updateQuest("chatted");
 }
+function updateQuestUI() {
+  const data = JSON.parse(localStorage.getItem("dailyQuests"));
+  if (!data) return;
+
+  const today = new Date().toDateString();
+  const quests = data[today];
+  if (!quests) return;
+
+  if (quests.addedTask)
+    document.getElementById("quest-add")?.classList.add("quest-done");
+
+  if (quests.completedTask)
+    document.getElementById("quest-complete")?.classList.add("quest-done");
+
+  if (quests.chatted)
+    document.getElementById("quest-chat")?.classList.add("quest-done");
+}
+
+updateQuestUI();
+
 
 
 
