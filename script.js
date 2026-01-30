@@ -211,6 +211,10 @@ function checkDailyCompletion() {
     increaseStreak();
   }
 }
+if (localStorage.getItem("chattedToday")) {
+  updateQuest("chatted");
+}
+
 
 
 
