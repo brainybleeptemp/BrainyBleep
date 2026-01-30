@@ -311,6 +311,22 @@ footer {
 .nav-link:hover {
   opacity: 0.7;
 }
+.daily-quests-card {
+  background: rgba(0,0,0,0.25);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+#quest-list li {
+  margin: 5px 0;
+}
+
+.quest-done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
 
 
 
