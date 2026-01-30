@@ -97,12 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const task = { description, subject, due, completed: false };
     tasks.push(task);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-
+    
     // Clear inputs
     taskDescInput.value = '';
     taskSubjectInput.value = '';
     taskDueInput.value = '';
-
+   updateQuest("addedTask");
     renderTasks();
     showTaskNotification(task);
     scheduleNotifications([task]);
@@ -118,6 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.deleteTask = (index) => {
     tasks.splice(index, 1);
     localStorage.setItem('tasks', JSON.stringify(tasks));
+   
+    updateQuest("completedTask");
     renderTasks();
   };
 
@@ -179,5 +181,36 @@ document.addEventListener('DOMContentLoaded', () => {
 };
 
 });
+// ========================
+// DAILY QUEST SYSTEM
+// ========================
+
+const todayKey = new Date().toDateString();
+let dailyData = JSON.parse(localStorage.getItem("dailyQuests")) || {};
+
+if (!dailyData[todayKey]) {
+  dailyData = {
+    [todayKey]: {
+      addedTask: false,
+      completedTask: false,
+      chatted: false
+    }
+  };
+  localStorage.setItem("dailyQuests", JSON.stringify(dailyData));
+}
+
+function updateQuest(type) {
+  dailyData[todayKey][type] = true;
+  localStorage.setItem("dailyQuests", JSON.stringify(dailyData));
+  checkDailyCompletion();
+}
+
+function checkDailyCompletion() {
+  const quests = dailyData[todayKey];
+  if (quests.addedTask && quests.completedTask && quests.chatted) {
+    increaseStreak();
+  }
+}
+
 
 
