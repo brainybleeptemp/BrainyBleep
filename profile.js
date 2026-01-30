@@ -42,3 +42,61 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('Profile saved!');
   });
 });
+// ========================
+// STREAK BABY SYSTEM
+// ========================
+
+const petFlame = document.getElementById("pet-flame");
+const petMood = document.getElementById("pet-mood");
+const petStage = document.getElementById("pet-stage");
+const petNameInput = document.getElementById("pet-name-input");
+const savePetNameBtn = document.getElementById("save-pet-name");
+const petNameDisplay = document.getElementById("pet-name-display");
+
+let streak = parseInt(localStorage.getItem("streak")) || 0;
+let lastQuestDate = localStorage.getItem("lastQuestDate");
+
+function updatePetVisual() {
+  const today = new Date().toDateString();
+  let mood = "Happy";
+  let stage = "Spark";
+  let flame = "🔥";
+
+  if (lastQuestDate !== today) {
+    mood = "Low energy";
+    flame = "💤";
+  }
+
+  if (streak >= 7) {
+    stage = "Legend Flame";
+    flame = "💙🔥";
+  } else if (streak >= 5) {
+    stage = "Neon Flame";
+  } else if (streak >= 3) {
+    stage = "Bright Flame";
+  } else if (streak >= 1) {
+    stage = "Warm Spark";
+  }
+
+  petFlame.textContent = flame;
+  petMood.textContent = `Mood: ${mood}`;
+  petStage.textContent = `Stage: ${stage}`;
+}
+
+savePetNameBtn.addEventListener("click", () => {
+  const name = petNameInput.value.trim();
+  if (!name) return;
+  localStorage.setItem("petName", name);
+  petNameDisplay.textContent = `Name: ${name}`;
+  petNameInput.value = "";
+});
+
+function loadPetName() {
+  const savedName = localStorage.getItem("petName");
+  if (savedName) {
+    petNameDisplay.textContent = `Name: ${savedName}`;
+  }
+}
+
+updatePetVisual();
+loadPetName();
