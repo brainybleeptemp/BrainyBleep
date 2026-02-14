@@ -18,20 +18,39 @@
 <body>
 
   <main class="home-main">
+<main class="home-main">
 
-    <h1 class="welcome-text">Welcome Back</h1>
+  <h1 class="welcome-text">Welcome Back</h1>
 
-    <div class="motivation-banner">
-      Stay consistent. Tiny wins stack different.
+  <!-- Mascot stays here above if you already added it -->
+
+  <!-- Motivation Banner -->
+  <div class="motivation-banner">
+    Stay consistent. Tiny wins stack different.
+  </div>
+
+  <!-- Progress Overview -->
+  <div class="progress-card">
+    <h3>Today's Progress</h3>
+    <div class="progress-container">
+      <div class="progress-bar" id="home-progress-bar"></div>
     </div>
+    <p id="home-progress-text">0 of 0 tasks completed</p>
+  </div>
 
-    <section class="mini-quests">
-      <h2>Mini Quests</h2>
+  <!-- Mini Quests (LIVE) -->
+  <section class="mini-quests">
+    <h2>Mini Quests</h2>
 
-      <div class="quest-card">📚 Complete 1 task today</div>
-      <div class="quest-card">⏱ Study 15 focused minutes</div>
-      <div class="quest-card">🔥 Keep your streak alive</div>
-    </section>
+    <div id="quest-add" class="quest-card">Add a task</div>
+    <div id="quest-complete" class="quest-card">Complete a task</div>
+    <div id="quest-chat" class="quest-card">Chat with Bleep</div>
+
+  </section>
+
+</main>
+
+    
 
   </main>
   
@@ -45,6 +64,7 @@
 </nav>
 </body>
 </html>
+
 
 
 
