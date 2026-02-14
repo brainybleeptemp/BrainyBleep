@@ -1,5 +1,5 @@
 // ========================
-// BrainyBleep script.js
+// BrainyBleep script.js (FIXED STABLE VERSION)
 // ========================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== THEME TOGGLE =====
   const themeToggle = document.getElementById('theme-toggle');
   const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.body.className = savedTheme;
-  }
+
+  if (savedTheme) document.body.className = savedTheme;
+
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
       if (document.body.classList.contains('light')) {
@@ -22,26 +22,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== NAME SAVE =====
+  // ===== NAME SAVE (SAFE VERSION) =====
   const nameInput = document.getElementById('name-input');
   const saveNameBtn = document.getElementById('save-name-btn');
   const greetingEl = document.getElementById('greeting');
 
-  // Load saved name
   const storedName = localStorage.getItem('studentName');
-  if (storedName) {
+  if (storedName && greetingEl) {
     greetingEl.textContent = `Welcome back, ${storedName} 👋`;
   }
 
-  saveNameBtn.addEventListener('click', () => {
-    const name = nameInput.value.trim();
-    if (!name) return;
-    localStorage.setItem('studentName', name);
-    greetingEl.textContent = `Welcome back, ${name} 👋`;
-    nameInput.value = '';
-  });
+  if (saveNameBtn && nameInput && greetingEl) {
+    saveNameBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      if (!name) return;
+      localStorage.setItem('studentName', name);
+      greetingEl.textContent = `Welcome back, ${name} 👋`;
+      nameInput.value = '';
+    });
+  }
 
-  // ===== TASK STORAGE & RENDERING =====
+  // ===== TASK STORAGE =====
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
   const taskListEl = document.getElementById('task-list');
@@ -55,9 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== NOTIFICATIONS =====
   if ('Notification' in window && navigator.serviceWorker) {
-    Notification.requestPermission().then(permission => {
-      if (permission === "granted") console.log("Notifications allowed");
-    });
+    Notification.requestPermission();
   }
 
   function showTaskNotification(task) {
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     taskList.forEach(task => {
       const now = new Date();
       const taskTime = new Date(task.due);
-      const timeout = taskTime - now - 5 * 60 * 1000; // 5 min before
+      const timeout = taskTime - now - 5 * 60 * 1000;
 
       if (timeout > 0) {
         setTimeout(() => showTaskNotification(task), timeout);
@@ -86,101 +85,102 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== TASK FUNCTIONS =====
-  addBtn.addEventListener('click', () => {
-    const description = taskDescInput.value.trim();
-    const subject = taskSubjectInput.value.trim();
-    const due = taskDueInput.value;
+  // ===== ADD TASK (FIXED BUTTON) =====
+  if (addBtn && taskDescInput && taskSubjectInput && taskDueInput) {
+    addBtn.addEventListener('click', () => {
 
-    if (!description || !subject || !due) return;
+      const description = taskDescInput.value.trim();
+      const subject = taskSubjectInput.value.trim();
+      const due = taskDueInput.value;
 
-    const task = { description, subject, due, completed: false };
-    tasks.push(task);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    
-    // Clear inputs
-    taskDescInput.value = '';
-    taskSubjectInput.value = '';
-    taskDueInput.value = '';
-   updateQuest("addedTask");
-    renderTasks();
-    showTaskNotification(task);
-    scheduleNotifications([task]);
-  });
+      if (!description || !subject || !due) return;
 
-  // Make toggleComplete and deleteTask global
+      const task = { description, subject, due, completed: false };
+      tasks.push(task);
+
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+
+      taskDescInput.value = '';
+      taskSubjectInput.value = '';
+      taskDueInput.value = '';
+
+      updateQuest("addedTask");
+
+      renderTasks();
+      showTaskNotification(task);
+      scheduleNotifications([task]);
+      updateHomeProgress();
+    });
+  }
+
+  // ===== TOGGLE COMPLETE =====
   window.toggleComplete = (index) => {
     tasks[index].completed = !tasks[index].completed;
     localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    if (tasks[index].completed) {
+      updateQuest("completedTask");
+    }
+
     renderTasks();
+    updateHomeProgress();
   };
 
+  // ===== DELETE TASK =====
   window.deleteTask = (index) => {
     tasks.splice(index, 1);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-   
-    updateQuest("completedTask");
     renderTasks();
+    updateHomeProgress();
   };
 
   // ===== RENDER TASKS =====
   function renderTasks() {
+    if (!taskListEl) return;
+
     taskListEl.innerHTML = '';
 
     tasks.forEach((task, index) => {
       const li = document.createElement('li');
       li.className = task.completed ? 'completed-task' : '';
+
       li.innerHTML = `
         <strong>${task.subject}</strong>: ${task.description}<br>
         Due: ${new Date(task.due).toLocaleString()}<br>
-        <button onclick="toggleComplete(${index})">${task.completed ? 'Undo' : 'Done'}</button>
+        <button onclick="toggleComplete(${index})">
+          ${task.completed ? 'Undo' : 'Done'}
+        </button>
         <button onclick="deleteTask(${index})">Delete</button>
       `;
+
       taskListEl.appendChild(li);
     });
 
     updateProgress();
   }
 
+  // ===== PROGRESS =====
   function updateProgress() {
+    if (!progressBarEl || !progressTextEl) return;
+
     if (tasks.length === 0) {
       progressBarEl.style.width = '0%';
       progressTextEl.textContent = '0 of 0 tasks completed';
       return;
     }
+
     const completed = tasks.filter(t => t.completed).length;
     const percent = (completed / tasks.length) * 100;
+
     progressBarEl.style.width = `${percent}%`;
     progressTextEl.textContent = `${completed} of ${tasks.length} tasks completed`;
   }
 
-  // Schedule notifications for existing tasks on load
   scheduleNotifications(tasks);
-
-  // Initial render
   renderTasks();
-  window.completeChallenge = (index) => {
-  // Toggle the quest as done/undone
-  challenges[index].done = !challenges[index].done;
-
-  // Save current state
-  localStorage.setItem('challenges', JSON.stringify(challenges));
-
-  // Re-render mini challenges
-  renderChallenges();
-  renderDailyChallenges();
-
-  // Check if all quests are completed for the day
-  const allDone = challenges.every(c => c.done);
-
-  if (allDone) {
-    streak += 1;  // Only add 1 point when ALL quests done
-    localStorage.setItem('streak', streak);
-    alert(`🎉 Congrats! You completed all quests today. Streak: ${streak}`);
-  }
-};
-
 });
+
+
 // ========================
 // DAILY QUEST SYSTEM
 // ========================
@@ -189,12 +189,10 @@ const todayKey = new Date().toDateString();
 let dailyData = JSON.parse(localStorage.getItem("dailyQuests")) || {};
 
 if (!dailyData[todayKey]) {
-  dailyData = {
-    [todayKey]: {
-      addedTask: false,
-      completedTask: false,
-      chatted: false
-    }
+  dailyData[todayKey] = {
+    addedTask: false,
+    completedTask: false,
+    chatted: false
   };
   localStorage.setItem("dailyQuests", JSON.stringify(dailyData));
 }
@@ -202,24 +200,11 @@ if (!dailyData[todayKey]) {
 function updateQuest(type) {
   dailyData[todayKey][type] = true;
   localStorage.setItem("dailyQuests", JSON.stringify(dailyData));
-  checkDailyCompletion();
+  updateQuestUI();
 }
 
-function checkDailyCompletion() {
-  const quests = dailyData[todayKey];
-  if (quests.addedTask && quests.completedTask && quests.chatted) {
-    increaseStreak();
-  }
-}
-if (localStorage.getItem("chattedToday")) {
-  updateQuest("chatted");
-}
 function updateQuestUI() {
-  const data = JSON.parse(localStorage.getItem("dailyQuests"));
-  if (!data) return;
-
-  const today = new Date().toDateString();
-  const quests = data[today];
+  const quests = dailyData[todayKey];
   if (!quests) return;
 
   if (quests.addedTask)
@@ -233,9 +218,9 @@ function updateQuestUI() {
 }
 
 updateQuestUI();
+
 function updateHomeProgress() {
   const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
   const total = tasks.length;
   const completed = tasks.filter(t => t.completed).length;
 
@@ -245,15 +230,8 @@ function updateHomeProgress() {
   if (!bar || !text) return;
 
   const percent = total === 0 ? 0 : (completed / total) * 100;
-
   bar.style.width = percent + "%";
   text.textContent = `${completed} of ${total} tasks completed`;
 }
 
 updateHomeProgress();
-
-
-
-
-
-
