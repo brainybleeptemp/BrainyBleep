@@ -233,6 +233,25 @@ function updateQuestUI() {
 }
 
 updateQuestUI();
+function updateHomeProgress() {
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  const total = tasks.length;
+  const completed = tasks.filter(t => t.completed).length;
+
+  const bar = document.getElementById("home-progress-bar");
+  const text = document.getElementById("home-progress-text");
+
+  if (!bar || !text) return;
+
+  const percent = total === 0 ? 0 : (completed / total) * 100;
+
+  bar.style.width = percent + "%";
+  text.textContent = `${completed} of ${total} tasks completed`;
+}
+
+updateHomeProgress();
+
 
 
 
