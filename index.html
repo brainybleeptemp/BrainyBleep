@@ -15,61 +15,26 @@
 </head>
 
 <body>
+<body>
 
-  <!-- Service Worker (OK here) -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("Service Worker registered"))
-        .catch(err => console.error("Service Worker registration failed:", err));
-    }
-  </script>
+  <main class="home-main">
 
-  <header>
-    <button id="theme-toggle" aria-label="Toggle theme">🌙 / ☀️</button>
-    <h1>📚 BrainyBleep</h1>
-    <p>Deadlines don’t ghost you here.</p>
-    <!-- Profile link -->
-  <a href="profile.html" class="profile-link">Profile</a>
-  </header>
+    <h1 class="welcome-text">Welcome Back</h1>
 
-  <main>
-    <h2>Upcoming Homework</h2>
-
-    <div class="user-card">
-      <p id="greeting">Welcome 👋</p>
-      <input type="text" id="name-input" placeholder="Enter your name">
-      <button id="save-name-btn">Save Name</button>
+    <div class="motivation-banner">
+      Stay consistent. Tiny wins stack different.
     </div>
 
-    <div class="quote-card">
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-        <p id="progress-text">0 of 0 tasks completed</p>
-      </div>
-      <p id="quote">“Small steps every day.”</p>
-    </div>
- <div class="daily-quests-card">
-  <h3>Daily Quests</h3>
-  <ul id="quest-list">
-    <li id="quest-add">Add a task</li>
-    <li id="quest-complete">Complete a task</li>
-    <li id="quest-chat">Chat with Bleep</li>
-  </ul>
-</div>  
-    <ul id="task-list"></ul>
+    <section class="mini-quests">
+      <h2>Mini Quests</h2>
 
-    <h3>Add a Task</h3>
-    <input type="text" id="task-input" placeholder="Task description">
-    <input type="text" id="subject-input" placeholder="Subject (e.g. Math)">
-    <input type="datetime-local" id="date-input">
-    <button id="add-btn">Add Reminder</button>
+      <div class="quest-card">📚 Complete 1 task today</div>
+      <div class="quest-card">⏱ Study 15 focused minutes</div>
+      <div class="quest-card">🔥 Keep your streak alive</div>
+    </section>
+
   </main>
-
-  <footer>
-    <p>Stay sharp, stay iconic ✨</p>
-  </footer>
-
+  
   <!-- Cache-busted JS (ONLY ONCE, AT THE END) -->
   <script src="script.js?v=2"></script>
 <nav class="nav-bar">
@@ -80,6 +45,7 @@
 </nav>
 </body>
 </html>
+
 
 
 
