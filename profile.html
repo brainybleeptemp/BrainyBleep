@@ -1,54 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrainyBleep - Profile</title>
+  <title>Profile</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🧑‍🎓 Your Profile</h1>
-    <a href="index.html">⬅ Back to Home</a>
-  </header>
 
-  <main>
-    <div class="profile-card">
-      <div class="profile-picture">
-        <img id="profile-img" src="mascot-head-icon.png" alt="Profile Picture">
-        <input type="file" id="profile-pic-input" accept="image/*">
-      </div>
+<header>
+  <a href="index.html">Home</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="profile.html">Profile</a>
+</header>
 
-      <p id="profile-name">Welcome, Student 👋</p>
-      <label for="badge-select">Choose your badge:</label>
-      <select id="badge-select">
-        <option value="Amateur Legend">Amateur Legend</option>
-        <option value="Task Master">Task Master</option>
-        <option value="Brainy Star">Brainy Star</option>
-        <option value="Daily Champ">Daily Champ</option>
-      </select>
-      <p>Your Badge: <span id="badge-display">Amateur Legend</span></p>
+<main class="profile-main">
 
-      <button id="save-profile-btn">Save Profile</button>
+  <h1>Your Profile</h1>
+
+  <!-- PROFILE PICTURE -->
+  <div class="avatar-section">
+    <div class="avatar-frame">
+      <img id="profile-pic" src="" alt="Profile Picture">
     </div>
-  </main>
+    <input type="file" id="upload-pic" accept="image/*">
+  </div>
 
-  <footer>
-    <p>Stay sharp, stay iconic ✨</p>
-  </footer>
+  <!-- STREAK -->
+  <div class="profile-card">
+    <h2>🔥 Streak</h2>
+    <p id="streak-count">0 Days</p>
+  </div>
 
-  <script src="profile.js"></script>
+  <!-- BADGE -->
+  <div class="profile-card">
+    <h2>🏅 Rank</h2>
+    <p id="badge-name">Amateur</p>
+  </div>
+
+  <!-- FLAME -->
+  <div class="profile-card">
+    <h2>Your Flame</h2>
+
+    <div class="flame-container">
+      <div id="flame" class="flame"></div>
+    </div>
+
+    <input type="text" id="flame-name-input" placeholder="Name your flame">
+    <button id="save-flame-name">Save Name</button>
+
+    <p id="flame-name-display"></p>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
-<div class="streak-pet-card">
-  <h3>Your Streak Baby</h3>
-
-  <div id="pet-flame">🔥</div>
-  <p id="pet-mood">Mood: Happy</p>
-  <p id="pet-stage">Stage: Spark</p>
-
-  <input type="text" id="pet-name-input" placeholder="Name your streak baby">
-  <button id="save-pet-name">Save Name</button>
-
-  <p id="pet-name-display"></p>
-</div>
