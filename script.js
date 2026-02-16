@@ -211,9 +211,6 @@ function updateQuestUI() {
 
   if (quests.completedTask)
     document.getElementById("quest-complete")?.classList.add("quest-done");
-
-  if (quests.chatted)
-    document.getElementById("quest-chat")?.classList.add("quest-done");
 }
 
 updateQuestUI();
@@ -234,4 +231,5 @@ function updateHomeProgress() {
 }
 
 updateHomeProgress();
+
 
