@@ -305,28 +305,38 @@ if (uploadInput && profilePic) {
     reader.readAsDataURL(file);
   });
 }
+// FLAME NAME SYSTEM (IMPROVED)
+const flameNameInput = document.getElementById("flame-name-input");
+const saveFlameBtn = document.getElementById("save-flame-name");
+const flameNameDisplay = document.getElementById("flame-name-display");
 
-  // FLAME NAME SAVE
-  const flameNameInput = document.getElementById("flame-name-input");
-  const saveFlameBtn = document.getElementById("save-flame-name");
-  const flameNameDisplay = document.getElementById("flame-name-display");
-
+if (flameNameDisplay) {
   const savedFlameName = localStorage.getItem("flameName");
-  if (savedFlameName && flameNameDisplay) {
+
+  if (savedFlameName) {
     flameNameDisplay.textContent = savedFlameName;
+    flameNameInput.style.display = "none";
+    saveFlameBtn.style.display = "none";
   }
+}
 
-  if (saveFlameBtn && flameNameInput) {
-    saveFlameBtn.addEventListener("click", () => {
-      const name = flameNameInput.value.trim();
-      if (!name) return;
-      localStorage.setItem("flameName", name);
-      flameNameDisplay.textContent = name;
-      flameNameInput.value = "";
-    });
-  }
+if (saveFlameBtn && flameNameInput && flameNameDisplay) {
+  saveFlameBtn.addEventListener("click", () => {
+    const name = flameNameInput.value.trim();
+    if (!name) return;
 
-});
+    localStorage.setItem("flameName", name);
+    flameNameDisplay.textContent = name;
+
+    flameNameInput.style.display = "none";
+    saveFlameBtn.style.display = "none";
+  });
+}
+
+ 
+
+
+
 
 
 
