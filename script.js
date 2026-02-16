@@ -231,5 +231,91 @@ function updateHomeProgress() {
 }
 
 updateHomeProgress();
+// ========================
+// PROFILE SYSTEM
+// ========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const streak = parseInt(localStorage.getItem("streak")) || 0;
+
+  const streakEl = document.getElementById("streak-count");
+  const badgeEl = document.getElementById("badge-name");
+  const flameEl = document.getElementById("flame");
+
+  // SHOW STREAK
+  if (streakEl) {
+    streakEl.textContent = `${streak} Days`;
+  }
+
+  // BADGE SYSTEM (AUTO)
+  if (badgeEl) {
+    let badge = "Amateur";
+
+    if (streak >= 7) badge = "Focused";
+    if (streak >= 30) badge = "Consistent";
+    if (streak >= 90) badge = "Elite";
+    if (streak >= 180) badge = "Unstoppable";
+
+    badgeEl.textContent = badge;
+  }
+
+  // FLAME GROWTH
+  if (flameEl) {
+    const baseSize = 70;
+    const growth = streak * 4;
+    flameEl.style.height = `${baseSize + growth}px`;
+
+    if (streak >= 30) {
+      flameEl.style.background = "linear-gradient(to top, red, orange, yellow)";
+    }
+
+    if (streak >= 90) {
+      flameEl.style.background = "linear-gradient(to top, purple, red, orange)";
+    }
+  }
+
+  // PROFILE PICTURE SAVE
+  const uploadInput = document.getElementById("upload-pic");
+  const profilePic = document.getElementById("profile-pic");
+
+  const savedPic = localStorage.getItem("profilePic");
+  if (savedPic && profilePic) {
+    profilePic.src = savedPic;
+  }
+
+  if (uploadInput && profilePic) {
+    uploadInput.addEventListener("change", function () {
+      const reader = new FileReader();
+      reader.onload = function () {
+        localStorage.setItem("profilePic", reader.result);
+        profilePic.src = reader.result;
+      };
+      reader.readAsDataURL(this.files[0]);
+    });
+  }
+
+  // FLAME NAME SAVE
+  const flameNameInput = document.getElementById("flame-name-input");
+  const saveFlameBtn = document.getElementById("save-flame-name");
+  const flameNameDisplay = document.getElementById("flame-name-display");
+
+  const savedFlameName = localStorage.getItem("flameName");
+  if (savedFlameName && flameNameDisplay) {
+    flameNameDisplay.textContent = savedFlameName;
+  }
+
+  if (saveFlameBtn && flameNameInput) {
+    saveFlameBtn.addEventListener("click", () => {
+      const name = flameNameInput.value.trim();
+      if (!name) return;
+      localStorage.setItem("flameName", name);
+      flameNameDisplay.textContent = name;
+      flameNameInput.value = "";
+    });
+  }
+
+});
+
 
 
