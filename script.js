@@ -275,25 +275,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // PROFILE PICTURE SAVE
-  const uploadInput = document.getElementById("upload-pic");
-  const profilePic = document.getElementById("profile-pic");
+ // PROFILE PICTURE SYSTEM (FIXED)
+const uploadInput = document.getElementById("upload-pic");
+const profilePic = document.getElementById("profile-pic");
 
+if (profilePic) {
   const savedPic = localStorage.getItem("profilePic");
-  if (savedPic && profilePic) {
-    profilePic.src = savedPic;
-  }
 
-  if (uploadInput && profilePic) {
-    uploadInput.addEventListener("change", function () {
-      const reader = new FileReader();
-      reader.onload = function () {
-        localStorage.setItem("profilePic", reader.result);
-        profilePic.src = reader.result;
-      };
-      reader.readAsDataURL(this.files[0]);
-    });
+  if (savedPic) {
+    profilePic.src = savedPic;
+  } else {
+    profilePic.src = "https://via.placeholder.com/140";
   }
+}
+
+if (uploadInput && profilePic) {
+  uploadInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const imageData = e.target.result;
+      localStorage.setItem("profilePic", imageData);
+      profilePic.src = imageData;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
   // FLAME NAME SAVE
   const flameNameInput = document.getElementById("flame-name-input");
@@ -316,6 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
 
 
 
