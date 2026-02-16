@@ -192,7 +192,6 @@ if (!dailyData[todayKey]) {
   dailyData[todayKey] = {
     addedTask: false,
     completedTask: false,
-    chatted: false
   };
   localStorage.setItem("dailyQuests", JSON.stringify(dailyData));
 }
@@ -235,3 +234,4 @@ function updateHomeProgress() {
 }
 
 updateHomeProgress();
+
