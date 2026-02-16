@@ -420,6 +420,65 @@ body {
   text-decoration: line-through;
   border-color: #00ffcc;
 }
+.profile-main {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.avatar-section {
+  margin-bottom: 20px;
+}
+
+.avatar-frame {
+  width: 140px;
+  height: 140px;
+  margin: auto;
+  border-radius: 50%;
+  border: 3px solid #a020f0;
+  box-shadow: 0 0 25px #a020f0;
+  overflow: hidden;
+  background: #111;
+}
+
+.avatar-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-card {
+  margin: 20px auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 15px;
+  background: rgba(160, 32, 240, 0.1);
+  border: 1px solid #a020f0;
+  box-shadow: 0 0 15px #6a0dad;
+}
+
+.flame-container {
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 20px 0;
+}
+
+.flame {
+  width: 50px;
+  height: 70px;
+  background: linear-gradient(to top, orange, yellow);
+  border-radius: 50% 50% 40% 40%;
+  animation: flicker 1s infinite alternate;
+  transition: height 0.4s ease;
+}
+
+@keyframes flicker {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(1.1); }
+}
+
 
 
 
