@@ -84,34 +84,43 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+const addBtn = document.getElementById('add-btn');
+const taskDescInput = document.getElementById('task-input');
+const taskSubjectInput = document.getElementById('subject-input');
+const taskDueInput = document.getElementById('date-input');
 
-  // ===== ADD TASK (FIXED BUTTON) =====
-  if (addBtn && taskDescInput && taskSubjectInput && taskDueInput) {
-    addBtn.addEventListener('click', () => {
+if (addBtn) {
+  addBtn.addEventListener('click', function () {
 
-      const description = taskDescInput.value.trim();
-      const subject = taskSubjectInput.value.trim();
-      const due = taskDueInput.value;
+    const description = taskDescInput?.value.trim();
+    const subject = taskSubjectInput?.value.trim();
+    const due = taskDueInput?.value;
 
-      if (!description || !subject || !due) return;
+    if (!description || !subject || !due) {
+      alert("Fill in all fields.");
+      return;
+    }
 
-      const task = { description, subject, due, completed: false };
-      tasks.push(task);
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-      localStorage.setItem('tasks', JSON.stringify(tasks));
+    const newTask = {
+      description: description,
+      subject: subject,
+      due: due,
+      completed: false
+    };
 
-      taskDescInput.value = '';
-      taskSubjectInput.value = '';
-      taskDueInput.value = '';
+    tasks.push(newTask);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
-      updateQuest("addedTask");
+    taskDescInput.value = "";
+    taskSubjectInput.value = "";
+    taskDueInput.value = "";
 
-      renderTasks();
-      showTaskNotification(task);
-      scheduleNotifications([task]);
-      updateHomeProgress();
-    });
-  }
+    location.reload(); // temporarily force refresh to confirm it saved
+  });
+}
+
 
   // ===== TOGGLE COMPLETE =====
   window.toggleComplete = (index) => {
@@ -334,6 +343,7 @@ if (saveFlameBtn && flameNameInput && flameNameDisplay) {
 }
 
  
+
 
 
 
